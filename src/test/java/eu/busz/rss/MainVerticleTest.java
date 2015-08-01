@@ -20,7 +20,7 @@ public class MainVerticleTest {
     public void setUp(TestContext context) {
         vertx = Vertx.vertx();
         http = new HttpService(vertx);
-        vertx.deployVerticle(MainVerticle.class.getName(), context.asyncAssertSuccess());
+        vertx.deployVerticle(FeedVerticle.class.getName(), context.asyncAssertSuccess());
     }
 
     @After
