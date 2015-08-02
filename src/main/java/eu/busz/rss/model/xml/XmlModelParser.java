@@ -1,15 +1,9 @@
 package eu.busz.rss.model.xml;
 
-import eu.busz.rss.model.feed.Feed;
-import eu.busz.rss.model.feed.Feeds;
-import eu.busz.rss.model.feed.RssRoot;
 import lombok.SneakyThrows;
 
-import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
 import java.io.StringWriter;
 

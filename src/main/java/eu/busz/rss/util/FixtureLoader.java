@@ -4,13 +4,10 @@ import eu.busz.rss.model.feed.Feeds;
 import eu.busz.rss.model.feed.RssRoot;
 import eu.busz.rss.model.xml.Xml;
 import eu.busz.rss.model.xml.XmlModelParser;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.FileSystem;
 import org.apache.commons.io.IOUtils;
 
 import javax.inject.Inject;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 

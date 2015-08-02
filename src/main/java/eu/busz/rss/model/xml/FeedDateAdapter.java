@@ -1,10 +1,10 @@
 package eu.busz.rss.model.xml;
+
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class FeedDateAdapter extends XmlAdapter<String, Date> {
 

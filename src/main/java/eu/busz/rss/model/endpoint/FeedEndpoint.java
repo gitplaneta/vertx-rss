@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static io.vertx.core.json.Json.encode;
 import static java.util.Arrays.asList;
 
 public class FeedEndpoint {
@@ -27,41 +26,38 @@ public class FeedEndpoint {
     }
 
     public void getXmlFeeds(RoutingContext request) {
-        if (request.request().getParam("latest") != null) {
-            respondWithLatestFeed(request, this::encodeFeedsToXml);
-        } else {
-            Feeds feeds = getAllFeeds();
-            request.response().end(encodeFeedsToXml(feeds));
-        }
+        getFeeds(request, this::encodeFeedsToXml);
     }
 
     public void getJsonFeeds(RoutingContext request) {
+        getFeeds(request, Json::encode);
+    }
+
+    private void getFeeds(RoutingContext request, Function<Feeds, String> encoder) {
         if (request.request().getParam("latest") != null) {
-            respondWithLatestFeed(request, Json::encode);
+            respondWithLatestFeed(request, encoder);
         } else {
-            Feeds feedRoot = getAllFeeds();
-            request.response().end(encode(feedRoot));
+            Feeds feeds = getAllFeeds();
+            request.response().end(encoder.apply(feeds));
         }
     }
 
     public void getXmlFeedById(RoutingContext request) {
-        String id = request.request().getParam("id");
-        Optional<Feed> feed = repository.getFeed(id);
-
-        if (!feed.isPresent()) {
-            request.response().setStatusCode(404).end();
-        }
-        feed.ifPresent(res -> request.response().end(encodeFeedToXml(res)));
+        getFeedById(request, this::encodeFeedToXml);
     }
 
     public void getJsonFeedById(RoutingContext request) {
+        getFeedById(request, Json::encode);
+    }
+
+    private void getFeedById(RoutingContext request, Function<Feed, String> encoder) {
         String id = request.request().getParam("id");
         Optional<Feed> feed = repository.getFeed(id);
 
         if (!feed.isPresent()) {
             request.response().setStatusCode(404).end();
         }
-        feed.ifPresent(res -> request.response().end(encode(res)));
+        feed.ifPresent(res -> request.response().end(encoder.apply(res)));
     }
 
     public void respondWithLatestFeed(RoutingContext request, Function<Feeds, String> encoder) {
