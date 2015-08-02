@@ -1,31 +1,31 @@
 package eu.busz.rss.persitance;
 
 import com.google.common.collect.ImmutableList;
-import eu.busz.rss.model.feed.Feed;
+import eu.busz.rss.model.feed.FeedItem;
 
 import java.util.List;
 import java.util.Optional;
 
 public class FeedRepository {
 
-    private final List<Feed> feeds;
+    private final List<FeedItem> feedItems;
 
-    public FeedRepository(List<Feed> feeds) {
-        this.feeds = feeds;
+    public FeedRepository(List<FeedItem> feedItems) {
+        this.feedItems = feedItems;
     }
 
-    public List<Feed> getFeeds() {
-        return ImmutableList.copyOf(feeds);
+    public List<FeedItem> getFeedItems() {
+        return ImmutableList.copyOf(feedItems);
     }
 
-    public Optional<Feed> getFeed(String id) {
-        return feeds.stream()
+    public Optional<FeedItem> getFeed(String id) {
+        return feedItems.stream()
                 .filter(feed -> feed.getGuid().equals(id))
                 .findFirst();
     }
 
-    public Optional<Feed> getLatestFeed() {
-        return feeds.stream()
+    public Optional<FeedItem> getLatestFeed() {
+        return feedItems.stream()
                 .sorted((f1, f2) -> f2.getPubDate().compareTo(f1.getPubDate()))
                 .findFirst();
     }

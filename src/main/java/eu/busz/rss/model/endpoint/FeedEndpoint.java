@@ -1,7 +1,7 @@
 package eu.busz.rss.model.endpoint;
 
-import eu.busz.rss.model.feed.Feed;
-import eu.busz.rss.model.feed.Feeds;
+import eu.busz.rss.model.feed.FeedItem;
+import eu.busz.rss.model.feed.FeedItems;
 import eu.busz.rss.model.xml.XmlModelParser;
 import eu.busz.rss.persitance.FeedRepository;
 import io.vertx.core.json.Json;
@@ -33,12 +33,12 @@ public class FeedEndpoint {
         getFeeds(request, Json::encode);
     }
 
-    private void getFeeds(RoutingContext request, Function<Feeds, String> encoder) {
+    private void getFeeds(RoutingContext request, Function<FeedItems, String> encoder) {
         if (request.request().getParam("latest") != null) {
             respondWithLatestFeed(request, encoder);
         } else {
-            Feeds feeds = getAllFeeds();
-            request.response().end(encoder.apply(feeds));
+            FeedItems feedItems = getAllFeeds();
+            request.response().end(encoder.apply(feedItems));
         }
     }
 
@@ -50,9 +50,9 @@ public class FeedEndpoint {
         getFeedById(request, Json::encode);
     }
 
-    private void getFeedById(RoutingContext request, Function<Feed, String> encoder) {
+    private void getFeedById(RoutingContext request, Function<FeedItem, String> encoder) {
         String id = request.request().getParam("id");
-        Optional<Feed> feed = repository.getFeed(id);
+        Optional<FeedItem> feed = repository.getFeed(id);
 
         if (!feed.isPresent()) {
             request.response().setStatusCode(404).end();
@@ -60,28 +60,28 @@ public class FeedEndpoint {
         feed.ifPresent(res -> request.response().end(encoder.apply(res)));
     }
 
-    public void respondWithLatestFeed(RoutingContext request, Function<Feeds, String> encoder) {
-        Optional<Feed> latestFeed = repository.getLatestFeed();
+    public void respondWithLatestFeed(RoutingContext request, Function<FeedItems, String> encoder) {
+        Optional<FeedItem> latestFeed = repository.getLatestFeed();
 
         if (!latestFeed.isPresent()) {
             request.response().setStatusCode(404).end();
         }
         latestFeed.ifPresent(feed -> {
-            Feeds feeds = new Feeds(asList(feed));
-            request.response().end(encoder.apply(feeds));
+            FeedItems feedItems = new FeedItems(asList(feed));
+            request.response().end(encoder.apply(feedItems));
         });
     }
 
-    private String encodeFeedToXml(Feed res) {
-        return parser.serialize(res, Feed.class).getContent();
+    private String encodeFeedToXml(FeedItem res) {
+        return parser.serialize(res, FeedItem.class).getContent();
     }
 
-    private String encodeFeedsToXml(Feeds res) {
-        return parser.serialize(res, Feeds.class).getContent();
+    private String encodeFeedsToXml(FeedItems res) {
+        return parser.serialize(res, FeedItems.class).getContent();
     }
 
-    private Feeds getAllFeeds() {
-        List<Feed> feeds = repository.getFeeds();
-        return new Feeds(feeds);
+    private FeedItems getAllFeeds() {
+        List<FeedItem> feedItems = repository.getFeedItems();
+        return new FeedItems(feedItems);
     }
 }

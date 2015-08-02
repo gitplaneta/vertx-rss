@@ -2,8 +2,8 @@ package eu.busz.rss.acceptance;
 
 import eu.busz.rss.FeedVerticle;
 import eu.busz.rss.model.feed.Enclosure;
-import eu.busz.rss.model.feed.Feed;
-import eu.busz.rss.model.feed.Feeds;
+import eu.busz.rss.model.feed.FeedItem;
+import eu.busz.rss.model.feed.FeedItems;
 import eu.busz.rss.model.xml.XmlModelParser;
 import eu.busz.rss.util.HttpService;
 import io.vertx.core.Vertx;
@@ -45,7 +45,7 @@ public class ResourceGetFeatureTest {
     public void executeHttpGetOnAllResourcesAcceptXmlFormatAndCheckIfResponseHasElements(TestContext context) {
         final Async async = context.async();
         final String feedDescription = "Welcome, welcome to this here, the seventy-seventh edition of the XFM Breakfast Podcast. This week, Jon faces serious possible charges over a tea splillage, Noel Fielding drops by for a game of 'Band or Transformer' and we broadcast a public service announcement in search for a non-leather jacket-related title for Jon's book. T";
-        final Feed expectedFeed = Feed.builder()
+        final FeedItem expectedFeedItem = FeedItem.builder()
                 .guid(EXAMPLE_GUID)
                 .author("xfm.editorial@xfm.co.uk")
                 .title("Episode 77 - Noel Fielding, Book Titles and Frank Doherty")
@@ -68,14 +68,14 @@ public class ResourceGetFeatureTest {
                 .build();
 
         http.getXml(PORT, HOST, "/").thenAccept(xml -> {
-            Feeds feeds = new XmlModelParser().deserialize(xml, Feeds.class);
-            Feed actualFeed = feeds.getFeeds().stream()
+            FeedItems feedItems = new XmlModelParser().deserialize(xml, FeedItems.class);
+            FeedItem actualFeedItem = feedItems.getFeedItems().stream()
                     .filter(feed -> EXAMPLE_GUID.equals(feed.getGuid()))
                     .findFirst()
                     .get();
 
-            context.assertEquals(expectedFeed, actualFeed);
-            context.assertEquals(FEED_COUNT, feeds.getFeeds().size());
+            context.assertEquals(expectedFeedItem, actualFeedItem);
+            context.assertEquals(FEED_COUNT, feedItems.getFeedItems().size());
             async.complete();
         }).exceptionally(ex -> {
             context.fail(ex);
@@ -89,8 +89,8 @@ public class ResourceGetFeatureTest {
         final String expectedGuid = "218006";
 
         http.getXml(PORT, HOST, "/" + expectedGuid).thenAccept(xml -> {
-            Feed feed = new XmlModelParser().deserialize(xml, Feed.class);
-            context.assertEquals(expectedGuid, feed.getGuid());
+            FeedItem feedItem = new XmlModelParser().deserialize(xml, FeedItem.class);
+            context.assertEquals(expectedGuid, feedItem.getGuid());
             async.complete();
         }).exceptionally(ex -> {
             context.fail(ex);
@@ -104,8 +104,8 @@ public class ResourceGetFeatureTest {
         final String expectedGuid = "0ccc4d3c-c478-4574-afea-93ef056a8ec1";
 
         http.getXml(PORT, HOST, "/?latest").thenAccept(xml -> {
-            Feeds feeds = new XmlModelParser().deserialize(xml, Feeds.class);
-            context.assertEquals(expectedGuid, feeds.getFeeds().get(0).getGuid());
+            FeedItems feedItems = new XmlModelParser().deserialize(xml, FeedItems.class);
+            context.assertEquals(expectedGuid, feedItems.getFeedItems().get(0).getGuid());
             async.complete();
         }).exceptionally(ex -> {
             context.fail(ex);

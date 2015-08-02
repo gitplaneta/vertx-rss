@@ -37,6 +37,6 @@ public class FeedModule extends AbstractModule {
 
     @Provides
     private FeedRepository provideFeedRepository(FixtureLoader fixtureLoader) throws IOException {
-        return new FeedRepository(fixtureLoader.readFeedsFixture().getFeeds());
+        return new FeedRepository(fixtureLoader.readFeedsFixture().getFeedItems());
     }
 }

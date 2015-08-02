@@ -17,12 +17,12 @@ import java.util.List;
 @XmlRootElement(name = "items")
 @XmlAccessorType (XmlAccessType.FIELD)
 @EqualsAndHashCode
-public class Feeds {
+public class FeedItems {
 
     @XmlElement(name = "item")
-    private List<Feed> feeds = new ArrayList<>();
+    private List<FeedItem> feedItems = new ArrayList<>();
 
-    public List<Feed> getFeeds() {
-        return ImmutableList.copyOf(feeds);
+    public List<FeedItem> getFeedItems() {
+        return ImmutableList.copyOf(feedItems);
     }
 }

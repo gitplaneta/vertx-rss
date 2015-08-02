@@ -1,6 +1,6 @@
 package eu.busz.rss.util;
 
-import eu.busz.rss.model.feed.Feeds;
+import eu.busz.rss.model.feed.FeedItems;
 import eu.busz.rss.model.feed.RssRoot;
 import eu.busz.rss.model.xml.Xml;
 import eu.busz.rss.model.xml.XmlModelParser;
@@ -23,12 +23,12 @@ public class FixtureLoader {
         this.xmlParser = xmlParser;
     }
 
-    public Feeds readFeedsFixture() throws IOException {
+    public FeedItems readFeedsFixture() throws IOException {
         String feedFixture = IOUtils.toString(getFixtureFileStream());
         Xml xml = new Xml(feedFixture);
         RssRoot rssRoot = xmlParser.deserialize(xml, RssRoot.class);
 
-        return rssRoot.getFeeds();
+        return rssRoot.getFeedItems();
     }
 
     private InputStream getFixtureFileStream() {

@@ -10,5 +10,5 @@ public class RssRoot {
 
     @Getter
     @XmlElement(name = "channel")
-    private Feeds feeds;
+    private FeedItems feedItems;
 }

@@ -1,8 +1,8 @@
 package eu.busz.rss.eu.busz.rss.unit.feed;
 
 import eu.busz.rss.model.feed.Enclosure;
-import eu.busz.rss.model.feed.Feed;
-import eu.busz.rss.model.feed.Feeds;
+import eu.busz.rss.model.feed.FeedItem;
+import eu.busz.rss.model.feed.FeedItems;
 import eu.busz.rss.model.xml.FeedDateAdapter;
 import eu.busz.rss.model.xml.Xml;
 import eu.busz.rss.model.xml.XmlModelParser;
@@ -19,14 +19,14 @@ import static java.util.TimeZone.getTimeZone;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class FeedXmlParsingTest {
+public class FeedItemXmlParsingTest {
 
     private static final JAXBContext NOT_USED_JAX_CONTENT = null;
 
     @Test
     public void checkJaxBMappingBySerializingAndDeserializingFeedsThenCheckingEquality() throws JAXBException {
         XmlModelParser parser = new XmlModelParser();
-        Feed feed = Feed.builder()
+        FeedItem feedItem = FeedItem.builder()
                 .guid("220094")
                 .author("xfm.editorial@xfm.co.uk")
                 .title("Episode 4 - Denzel Washington, Kelly Jones, Lazy PR")
@@ -48,13 +48,13 @@ public class FeedXmlParsingTest {
                 .iTunesSummary("adsfasdf")
                 .iTunesDuration("0:45:58")
                 .build();
-        Feeds originalFeeds = new Feeds(asList(feed));
+        FeedItems originalFeedItems = new FeedItems(asList(feedItem));
 
-        Xml xmlFeeds = parser.serialize(originalFeeds, Feeds.class);
-        Feeds deserializedFeeds = parser.deserialize(xmlFeeds, Feeds.class);
+        Xml xmlFeeds = parser.serialize(originalFeedItems, FeedItems.class);
+        FeedItems deserializedFeedItems = parser.deserialize(xmlFeeds, FeedItems.class);
 
         assertThat("Object before marshalling should be equal to marshalled and unmarshalled object",
-                deserializedFeeds, equalTo(originalFeeds));
+                deserializedFeedItems, equalTo(originalFeedItems));
     }
 
     @Test

@@ -16,9 +16,9 @@ import java.util.Date;
 @Getter
 @EqualsAndHashCode
 @ToString
-@XmlRootElement(name = "feed")
+@XmlRootElement(name = "feedItem")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Feed implements Comparable<Feed> {
+public class FeedItem implements Comparable<FeedItem> {
     private String guid;
     private String author;
     private String title;
@@ -41,7 +41,7 @@ public class Feed implements Comparable<Feed> {
 
 
     @Override
-    public int compareTo(Feed o) {
+    public int compareTo(FeedItem o) {
         return this.getPubDate().compareTo(o.getPubDate());
     }
 }
