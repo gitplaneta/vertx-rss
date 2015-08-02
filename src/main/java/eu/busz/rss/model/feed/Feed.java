@@ -1,25 +1,31 @@
-package eu.busz.rss.model;
+package eu.busz.rss.model.feed;
 
+import eu.busz.rss.model.xml.FeedDateAdapter;
 import lombok.*;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Date;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode
+@ToString
 @XmlRootElement(name = "feed")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Feed {
-    private int guid;
+public class Feed implements Comparable<Feed> {
+    private String guid;
     private String author;
     private String title;
     private String description;
-    private String pubDate;
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(FeedDateAdapter.class)
+    private Date pubDate;
     private Enclosure enclosure;
 
     @XmlElement(namespace = "http://www.itunes.com/dtds/podcast-1.0.dtd", name = "subtitle")
@@ -32,4 +38,10 @@ public class Feed {
     private String iTunesSummary;
     @XmlElement(namespace = "http://www.itunes.com/dtds/podcast-1.0.dtd", name = "duration")
     private String iTunesDuration;
+
+
+    @Override
+    public int compareTo(Feed o) {
+        return this.getPubDate().compareTo(o.getPubDate());
+    }
 }

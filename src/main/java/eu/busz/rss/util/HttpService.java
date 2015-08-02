@@ -25,8 +25,8 @@ public class HttpService {
     public CompletableFuture<Xml> getXml(int port, String host, String path) {
         CompletableFuture<Xml> future = new CompletableFuture<>();
         getClient()
-                .get(port, host, path, r -> r.handler(body -> future.complete(new Xml(body.toString()))))
-                .putHeader("Content-Type", "application/xml")
+                .get(port, host, path, r -> r.bodyHandler(body -> future.complete(new Xml(body.toString()))))
+                .putHeader("Accept", "application/xml")
                 .end();
         return future;
     }

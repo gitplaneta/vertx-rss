@@ -1,4 +1,4 @@
-package eu.busz.rss.model;
+package eu.busz.rss.model.feed;
 
 import lombok.*;
 
