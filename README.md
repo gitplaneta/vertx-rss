@@ -4,8 +4,8 @@ mvn clean package
 To run:
 java -jar target/target/vertx-rss-1.0-SNAPSHOT-fat.jar
 
-Available endpoints:
-GET:
+Available endpoints under http://localhost:8080
+GET: 
 /
 /:id
 /?alternate
