@@ -5,6 +5,9 @@ import eu.busz.rss.model.feed.FeedItem;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.stream.Collectors.toList;
 
 public class FeedRepository {
 
@@ -28,5 +31,12 @@ public class FeedRepository {
         return feedItems.stream()
                 .sorted((f1, f2) -> f2.getPubDate().compareTo(f1.getPubDate()))
                 .findFirst();
+    }
+
+    public List<FeedItem> getEveryOtherFeed() {
+        AtomicInteger index = new AtomicInteger();
+        return feedItems.stream()
+                .filter(feed -> index.getAndIncrement() % 2 == 0)
+                .collect(toList());
     }
 }

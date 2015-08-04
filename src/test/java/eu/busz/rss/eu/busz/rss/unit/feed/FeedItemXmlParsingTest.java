@@ -8,23 +8,19 @@ import eu.busz.rss.model.xml.Xml;
 import eu.busz.rss.model.xml.XmlModelParser;
 import org.junit.Test;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.TimeZone.getTimeZone;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class FeedItemXmlParsingTest {
 
-    private static final JAXBContext NOT_USED_JAX_CONTENT = null;
-
     @Test
-    public void checkJaxBMappingBySerializingAndDeserializingFeedsThenCheckingEquality() throws JAXBException {
+    public void checkJaxBMappingBySerializingAndDeserializingFeedsThenCheckingEquality() {
         XmlModelParser parser = new XmlModelParser();
         FeedItem feedItem = FeedItem.builder()
                 .guid("220094")
@@ -48,7 +44,7 @@ public class FeedItemXmlParsingTest {
                 .iTunesSummary("adsfasdf")
                 .iTunesDuration("0:45:58")
                 .build();
-        FeedItems originalFeedItems = new FeedItems(asList(feedItem));
+        FeedItems originalFeedItems = new FeedItems(singletonList(feedItem));
 
         Xml xmlFeeds = parser.serialize(originalFeedItems, FeedItems.class);
         FeedItems deserializedFeedItems = parser.deserialize(xmlFeeds, FeedItems.class);

@@ -112,4 +112,21 @@ public class ResourceGetFeatureTest {
             return null;
         });
     }
+
+    @Test
+    public void executeHTTPGetToSelectAlteringElements(TestContext context) {
+        final Async async = context.async();
+        final String FIRST_ELEMENT_GUID = "0ccc4d3c-c478-4574-afea-93ef056a8ec1";
+        final String SECOND_ELEMENT_GUID = "e7c0d869-b365-48d6-8b8d-9e760817b184";
+
+        http.getXml(PORT, HOST, "/?alternate").thenAccept(xml -> {
+            FeedItems feedItems = new XmlModelParser().deserialize(xml, FeedItems.class);
+            context.assertEquals(FIRST_ELEMENT_GUID, feedItems.getFeedItems().get(0).getGuid());
+            context.assertEquals(SECOND_ELEMENT_GUID, feedItems.getFeedItems().get(1).getGuid());
+            async.complete();
+        }).exceptionally(ex -> {
+            context.fail(ex);
+            return null;
+        });
+    }
 }

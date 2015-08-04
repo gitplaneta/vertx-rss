@@ -8,14 +8,18 @@ import io.vertx.core.json.Json;
 import io.vertx.ext.web.RoutingContext;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 public class FeedEndpoint {
 
+    private static final String LATEST_QUERY_PARAM = "latest";
+    private static final String ALTERNATE_QUERY_PARAM = "alternate";
     private final FeedRepository repository;
     private final XmlModelParser parser;
 
@@ -33,21 +37,23 @@ public class FeedEndpoint {
         getFeeds(request, Json::encode);
     }
 
-    private void getFeeds(RoutingContext request, Function<FeedItems, String> encoder) {
-        if (request.request().getParam("latest") != null) {
-            respondWithLatestFeed(request, encoder);
-        } else {
-            FeedItems feedItems = getAllFeeds();
-            request.response().end(encoder.apply(feedItems));
-        }
-    }
-
     public void getXmlFeedById(RoutingContext request) {
         getFeedById(request, this::encodeFeedToXml);
     }
 
     public void getJsonFeedById(RoutingContext request) {
         getFeedById(request, Json::encode);
+    }
+
+    private void getFeeds(RoutingContext request, Function<FeedItems, String> encoder) {
+        if (request.request().getParam(LATEST_QUERY_PARAM) != null) {
+            respondWithLatestFeed(request, encoder);
+        } else if (request.request().getParam(ALTERNATE_QUERY_PARAM) != null) {
+            respondWithEveryOtherFeed(request, encoder);
+        } else {
+            FeedItems feedItems = getAllFeeds();
+            request.response().end(encoder.apply(feedItems));
+        }
     }
 
     private void getFeedById(RoutingContext request, Function<FeedItem, String> encoder) {
@@ -60,16 +66,23 @@ public class FeedEndpoint {
         feed.ifPresent(res -> request.response().end(encoder.apply(res)));
     }
 
-    public void respondWithLatestFeed(RoutingContext request, Function<FeedItems, String> encoder) {
+    private void respondWithLatestFeed(RoutingContext request, Function<FeedItems, String> encoder) {
         Optional<FeedItem> latestFeed = repository.getLatestFeed();
 
         if (!latestFeed.isPresent()) {
-            request.response().setStatusCode(404).end();
+            FeedItems feedItems = new FeedItems(emptyList());
+            request.response().end(encoder.apply(feedItems));
         }
         latestFeed.ifPresent(feed -> {
-            FeedItems feedItems = new FeedItems(asList(feed));
+            FeedItems feedItems = new FeedItems(singletonList(feed));
             request.response().end(encoder.apply(feedItems));
         });
+    }
+
+    private void respondWithEveryOtherFeed(RoutingContext request, Function<FeedItems, String> encoder) {
+        List<FeedItem> everyOtherFeed = repository.getEveryOtherFeed();
+        FeedItems feedItems = new FeedItems(everyOtherFeed);
+        request.response().end(encoder.apply(feedItems));
     }
 
     private String encodeFeedToXml(FeedItem res) {
