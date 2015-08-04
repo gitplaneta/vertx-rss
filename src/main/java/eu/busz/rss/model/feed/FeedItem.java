@@ -16,7 +16,7 @@ import java.util.Date;
 @Getter
 @EqualsAndHashCode
 @ToString
-@XmlRootElement(name = "feedItem")
+@XmlRootElement(name = "item")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FeedItem implements Comparable<FeedItem> {
     private String guid;
@@ -38,7 +38,6 @@ public class FeedItem implements Comparable<FeedItem> {
     private String iTunesSummary;
     @XmlElement(namespace = "http://www.itunes.com/dtds/podcast-1.0.dtd", name = "duration")
     private String iTunesDuration;
-
 
     @Override
     public int compareTo(FeedItem o) {

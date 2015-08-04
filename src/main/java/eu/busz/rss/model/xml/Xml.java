@@ -8,5 +8,4 @@ import lombok.RequiredArgsConstructor;
 public class Xml {
 
     private final String content;
-
 }

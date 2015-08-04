@@ -4,7 +4,6 @@ import eu.busz.rss.model.feed.FeedItems;
 import eu.busz.rss.model.feed.RssRoot;
 import eu.busz.rss.model.xml.Xml;
 import eu.busz.rss.model.xml.XmlModelParser;
-import io.vertx.core.file.FileSystem;
 import org.apache.commons.io.IOUtils;
 
 import javax.inject.Inject;
@@ -14,12 +13,10 @@ import java.io.InputStream;
 public class FixtureLoader {
 
     private static final String FIXTURE_FILE = "fixture.xml";
-    private final FileSystem fs;
     private final XmlModelParser xmlParser;
 
     @Inject
-    public FixtureLoader(FileSystem fs, XmlModelParser xmlParser) {
-        this.fs = fs;
+    public FixtureLoader(XmlModelParser xmlParser) {
         this.xmlParser = xmlParser;
     }
 

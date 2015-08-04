@@ -18,6 +18,7 @@ public class XmlModelParser {
         return new Xml(sw.toString());
     }
 
+    @SuppressWarnings("unchecked")
     @SneakyThrows(JAXBException.class)
     public <T> T deserialize(Xml xml, Class<T> clazz) {
         JAXBContext context = JAXBContext.newInstance(clazz);

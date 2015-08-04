@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class FeedModule extends AbstractModule {
 
     private final Vertx vertx;
-    //dodaj qualifier XML i JSON
 
     @Override
     protected void configure() {
